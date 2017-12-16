@@ -18,7 +18,7 @@ For your convenience, we also recommand you implement your model using the nlpcc
 ```Shell
 python baseline.py --use_emb --use_imemory --use_ememory
 ```
-You can remove "--use_emb", "--use_imemory", "--use_ememory" to remove the embedding, internal memory, and external memory module respectively
+You can remove "--use_emb", "--use_imemory", "--use_ememory" to remove the embedding, internal memory, and external memory module respectively.
 
 2. **test**
 ```Shell
