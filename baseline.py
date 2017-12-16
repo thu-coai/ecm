@@ -270,7 +270,7 @@ def train():
 
 
 def decode():
-    sys.path.append('/home/tux/Nick')
+    
     try:
         from wordseg_python import Global
     except:
