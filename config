@@ -1,0 +1,14 @@
+[data]
+category = 6 
+raw_train_file = nlpcc.train
+train_file = weibo.train.refine.tokenids
+raw_dev_file = nlpcc.dev
+dev_file = weibo.dev.refine.tokenids
+test_file = weibo.test.refine.tokenids
+post_vocab_file = vocab%d.post
+response_vocab_file = vocab%d.response
+ememory_vocab_file = vocab%d.ememory
+raw_wordvec = vector.txt
+wordvec = wordvec_refine.mat
+
+
