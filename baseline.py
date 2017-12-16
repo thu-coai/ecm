@@ -24,7 +24,6 @@ config.read('config')
 
 sess_config = tf.ConfigProto() 
 sess_config.gpu_options.allow_growth = True
-#sess_config.gpu_options.per_process_gpu_memory_fraction = 0.5
 
 tf.app.flags.DEFINE_float("learning_rate", 0.5, "Learning rate.")
 tf.app.flags.DEFINE_float("learning_rate_decay_factor", 0.99,
@@ -57,19 +56,9 @@ tf.app.flags.DEFINE_boolean("use_imemory", False,
                                                         "use imemory model")
 tf.app.flags.DEFINE_boolean("use_ememory", False,
                                                         "use ememory model")
-tf.app.flags.DEFINE_boolean("decode_chatting", False,
-                                                        "Set to True for dev_set response classification.")
-tf.app.flags.DEFINE_boolean("decode_file", False,
-                                                        "Set to True for dev_set response classification.")
-tf.app.flags.DEFINE_boolean("decode_bleu", False,
-                                                        "Set to True for dev_set response classification.")
-tf.app.flags.DEFINE_boolean("decode_classify", False,
-                                                        "Set to True for dev_set response classification.")
 tf.app.flags.DEFINE_boolean("decode", False,
                                                         "Set to True for interactive decoding.")
 tf.app.flags.DEFINE_boolean("beam_search", False, "beam search")
-tf.app.flags.DEFINE_boolean("self_test", False,
-                                                        "Run a self-test if this is set to True.")
 tf.app.flags.DEFINE_boolean("use_fp16", False,
                                                         "Train using fp16 instead of fp32.")
 
@@ -282,7 +271,18 @@ def train():
 
 def decode():
     sys.path.append('/home/tux/Nick')
-    from wordseg_python import Global
+    try:
+        from wordseg_python import Global
+    except:
+        Global = None
+
+    def split(sent):
+        sent = sent.decode('utf-8', 'ignore').encode('gbk', 'ignore')
+        if Global == None:
+            return sent.decode("gbk").split(' ')
+        tuples = [(word.decode("gbk"), pos) for word, pos in Global.GetTokenPos(sent)]
+        return [each[0] for each in tuples]
+
     with tf.Session(config=sess_config) as sess:
         with tf.device("/cpu:0"):
             # Create model and load parameters.
@@ -290,7 +290,7 @@ def decode():
             model.batch_size = 1    # We decode one sentence at a time.
             beam_search = FLAGS.beam_search
             beam_size = FLAGS.beam_size
-            num_output = 1
+            num_output = 5
 
             # Load vocabularies.
             post_vocab_path = os.path.join(FLAGS.data_dir, config.get('data', 'post_vocab_file') % FLAGS.post_vocab_size)
@@ -303,16 +303,9 @@ def decode():
             sys.stdout.flush()
             sentence = sys.stdin.readline()
             while sentence:
-                tuples = [(word.decode("gbk"), pos) for word, pos in Global.GetTokenPos(sentence.decode('utf-8',"ignore").encode('gbk', 'ignore'))]
-                outs = [each[0] for each in tuples]
-                sentence = " ".join(outs)
+                sentence = " ".join(split(sentence))
                 # Get token-ids for the input sentence.
                 token_ids = data_utils.sentence_to_token_ids(sentence, post_vocab)
-                # Which bucket does it belong to?
-                #sys.stdout.write("> please input the emotion:0-null, 1-like, 2-sad, 3-disgust, 4-angry, 5-happy\n>")
-                #sys.stdout.flush()
-                #decoder_emotion = int(sys.stdin.readline())
-                #print(decoder_emotion)
                 int2emotion = ['null', 'like', 'sad', 'disgust', 'angry', 'happy']
                 for decoder_emotion in range(1, 6):
                     bucket_id = min([b for b in xrange(len(_buckets))
