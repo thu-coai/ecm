@@ -40,10 +40,10 @@ You can remove "--use_emb", "--use_imemory", "--use_ememory" to remove the embed
 
 You can change the model parameters using:
 
-	--size xxx 					the hidden size of each layer
+	--size xxx 				the hidden size of each layer
 	--num_layers xxx 			the number of RNN layers
 	--batch_size xxx 			batch size to use during training 
-	--steps_per_checkpoint xxx 	steps to save and evaluate the model
+	--steps_per_checkpoint xxx 		steps to save and evaluate the model
 	--train_dir xxx				training directory
 	--use_emb xxx				whether to use the embedding module
 	--use_imemory xxx 			whether to use the internal memory module
