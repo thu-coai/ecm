@@ -25,7 +25,8 @@ This project is a tensorflow implement of our work, [ECM](https://arxiv.org/abs/
 * Train
 
 	``` python baseline.py --use_emb --use_imemory --use_ememory ```
-You can remove "--use_emb", "--use_imemory", "--use_ememory" to remove the embedding, internal memory, and external memory module respectively. The model will achieve the expected performance after 20 epochs.
+
+	You can remove "--use_emb", "--use_imemory", "--use_ememory" to remove the embedding, internal memory, and external memory module respectively. The model will achieve the expected performance after 20 epochs.
 
 * Test
 
