@@ -143,8 +143,8 @@ def prepare_data(data_dir, post_vocabulary_size, response_vocabulary_size, token
         train = json.load(open(train_path,'r'))
         dev = json.load(open(dev_path,'r'))
         # Create vocabularies of the appropriate sizes.
-        create_vocabulary(response_vocab_path, [x[0][0] for x in train], response_vocabulary_size, tokenizer)
-        create_vocabulary(post_vocab_path, [y[0] for x in train for y in x[1]], post_vocabulary_size, tokenizer)
+        create_vocabulary(response_vocab_path, [y[0] for x in train for y in x[1]], response_vocabulary_size, tokenizer)
+        create_vocabulary(post_vocab_path, [x[0][0] for x in train], post_vocabulary_size, tokenizer)
 
         # Create token ids for the training data.
         data_to_token_ids(train, post_vocab_path, response_vocab_path, tokenizer)
